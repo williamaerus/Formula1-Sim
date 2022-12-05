@@ -1,3 +1,8 @@
+## code made by Francesco Serangeli
+
+# this is not meant to be realistic or any kind of similar to the reality
+
+
 import random
 import time
 from datetime import datetime
@@ -266,31 +271,3 @@ def main():
     finishProcedure()
     
 main()
-
-
-
-
-
-
-    # Bahrain GP
-    # Saudi Arabian GP
-    # Australian GP
-    # Emilia Romagna GP
-    # Miami GP
-    # Spanish GP
-    # Monaco GP
-    # Azerbaijan GP
-    # Canadian GP
-    # British GP
-    # Austrian GP
-    # French GP
-    # Hungarian GP
-    # Belgian GP
-    # Dutch GP
-    # Italian GP
-    # Singapore GP
-    # Japanese GP
-    # United States GP
-    # Mexico City GP
-    # Brazilian GP
-    # Abu Dhabi GP
