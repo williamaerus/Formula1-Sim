@@ -6,6 +6,7 @@ There is nothing to install for this script, it uses this modules:
 3. datetime
 
 if you miss one of this modules you can install them with `pip`
+of course you need to download the complete repository and not just the main.py file
 # how to use it
 the code works without any kind of setup needed, you just need to run the script using this command: windows `python main.py` linux `python3 main.py`
 then you will need to insert the number of laps that you want your race to be, and the language that you want to use english ore italian for now, the script is made for around 30 laps races, of course it's going to work also with longer ones with the risk of not having enough cars on grid. 
