@@ -1,13 +1,16 @@
-## code made by Francesco Serangeli
-
-# this is not meant to be realistic or any kind of similar to the reality
-
-
 import random
 import time
 from datetime import datetime
 from datetime import date
+import italian as italian
+import english as english
+import os
+d = {'italian': italian, 'english': english}
+lang = input('insert a language: ')
+language = d[lang]
+today = date.today()
 now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
 drivers_number = {'Lewis Hamilton': 44, 'Max Verstappen': 33, 'Charles Leclerc': 16, 'Sergio Perez': 11, 'Carlos Sainz': 55, 'Lando Norris': 4, 'Daniel Ricciardo': 3, 'Esteban Ocon': 31, 'Pierre Gasly': 10, 'Fernando Alonso': 14, 'Sebastian Vettel': 5, 'Guanju Zhou': 24, 'Yuki Tsunoda': 22, 'Alexander Albon': 23, 'Mick Schumacher': 47, 'Kevin Magnussen': 20, 'George Russell': 63, 'Valtteri Bottas': 77, 'Lance Stroll': 18,'Nicholas Latifi':6}
 mercedes = {'name':'Mercedes Amg',
             'first_driver': 'Lewis Hamilton',
@@ -56,7 +59,7 @@ Positions = {'Lewis Hamilton':1, 'Sergio Perez':2, 'Charles Leclerc':3, 'George 
 grid = []
 MOMENTARYOVERTAKER = 0 
 MOMENTARYOVERTAKEN = 0 
-
+reaction_times = []
 teams = [redbull,mercedes,ferrari,mclaren,alphatauri,alpine,alfa_romeo,aston_martin,haas,alphatauri,williams]
 lap = 1 
 top6teams = [redbull,ferrari,mercedes]
@@ -65,12 +68,11 @@ other10teams = [alfa_romeo,aston_martin,haas,alphatauri,williams]
 top6drivers = [top6teams[0]['first_driver'],top6teams[1]['first_driver'],top6teams[2]['first_driver'],top6teams[0]['second_driver'],top6teams[1]['second_driver'],top6teams[2]['second_driver']]
 otherDrivers = [others[0]['first_driver'],others[1]['first_driver'],others[0]['second_driver'],others[1]['second_driver']]
 other10drivers = [other10teams[0]['first_driver'],other10teams[1]['first_driver'],other10teams[2]['first_driver'],other10teams[3]['first_driver'],other10teams[4]['first_driver'],other10teams[0]['second_driver'],other10teams[1]['second_driver'],other10teams[2]['second_driver'],other10teams[3]['second_driver'],other10teams[4]['second_driver']]
-DriversOnGrid_Number = (int(len(top6drivers))+int(len(otherDrivers))+int(len(other10drivers)))
-overtakeSuccesMsg =  ["AND HE MAKES IT!","OH MY GOD WHAT A MOVE FROM HIM","HE FINALLY HE OVERTOOK HIM"]
-overtakeFailureMsg = ["unfortnately he can't overtake him","but there is not enough space there, so he backs out"]
+# DriversOnGrid_Number = (int(len(top6drivers))+int(len(otherDrivers))+int(len(other10drivers)))
+# overtakeSuccesMsg =  ["AND HE MAKES IT!","OH MY GOD WHAT A MOVE FROM HIM","HE FINALLY HE OVERTOOK HIM"]
+# overtakeFailureMsg = language.overtakeFailureMsg
 
 report = []
-
 
 def create_grid():
     drivers = drivers_number.keys()
@@ -93,7 +95,7 @@ def create_grid():
     print("")
     print("")
     # print(f"here is the starting grid: \n{('    , ').join(top6drivers)}    , {('    , ').join(otherDrivers)}    , {('    , ').join(other10drivers)}")
-    print(f"here is the starting grid: \n{('    , ').join(grid)}")
+    print(f"{language.starting_grid:} \n{('    , ').join(grid)}")
     print("")
 
 def starting_animation(timess):
@@ -104,38 +106,45 @@ def starting_animation(timess):
         time.sleep(1)
         timess -= 1
       
-    print("AND IT'S LIGHTS OUT AND AWAY WE GO\n")
+    print(language.starting_message)
     time.sleep(0.5)
 timess = 5
 def start():
     create_grid()
-    report.append(f"starting grid:          {grid}")
+    report.append(f"{language.starting_grid}:          {grid}")
     starting_animation(5)
     print("")
     print("LAP:     1")
+    reactionTimes()
     def polewell():
         options = ['yes','no']
         x = random.choice(options)
         if x == 'yes':
-            print(f"{top6drivers[0]} get's away well from pole so {top6drivers[1]} can't even try to overtake him\n")
+            print(f"{top6drivers[0]} {language.starts_good} {top6drivers[1]} {language.cant_overtake}\n")
         else:
             def overtakepole():
                 options = ['yes','no']
                 y = random.choice(options)
                 if y == 'yes':
-                    print(f"{top6drivers[0]} doesn't get away well from pole {top6drivers[1]} tryes to overtake him {random.choice(overtakeSuccesMsg[0:1])}")
+                    print(f"{top6drivers[0]} {language.starts_bad} {top6drivers[1]} {random.choice(language.overtake_attempt)} {random.choice(language.pole_overtake)}")
                     overtakenDriver = top6drivers[0]
                     overtakerDriver = top6drivers[1]
                     report.append(f"{top6drivers[0]}({drivers_number[overtakerDriver]}) overtakes {top6drivers[1]}({drivers_number[overtakenDriver]})")
                     grid[0],grid[1] = grid[1],grid[0]
                 else: 
-                    print(f"{top6drivers[0]} doesn't get away well from pole, {top6drivers[1]} {random.choice(overtakeFailureMsg)}")
+                    print(f"{top6drivers[0]} {language.starts_bad}, {top6drivers[1]} {random.choice(language.overtakeFailureMsg)}")
             overtakepole()
 
     
     polewell()
-
+def reactionTimes():
+    for i in grid:
+        x = random.randrange(200,400)
+        reaction_times.append(f"{i}:    0,{x}")
 def overtake():
+    overtake_attempt = [language.overtake_attempt1,language.overtake_attempt2]
+    options = ['yes','no']
+    x = random.choice(options)
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
     global MOMENTARYOVERTAKEN
@@ -144,15 +153,24 @@ def overtake():
     if maxNumber <= 6:
         finishProcedure()
     def makeOvertake():
-        Overtaken = random.randrange(maxNumber)
-        Overtaker = int(Overtaken+1)
-        overtakenDriver = grid[Overtaken]
-        overtakerDriver = grid[Overtaker]
-        print(f"{current_time}:       {grid[Overtaker]} overtakes {grid[Overtaken]}")
-        report.append(f"LAP {lap}:           {grid[Overtaker]}({drivers_number[overtakerDriver]}) overtakes {grid[Overtaken]}({drivers_number[overtakenDriver]})")    
-        grid[Overtaker], grid[Overtaken] = grid[Overtaken], grid[Overtaker]
-        print("")     
-        print()
+        if x == "yes":
+            
+            Overtaken = random.randrange(maxNumber)
+            Overtaker = int(Overtaken+1)
+            overtakenDriver = grid[Overtaken]
+            overtakerDriver = grid[Overtaker]
+            print(f"{current_time}:       {grid[Overtaker]} {random.choice(overtake_attempt)} {grid[Overtaken]} {random.choice(language.overtakeSuccesMsg)}")
+            report.append(f"{language.LAP} {lap}:           {grid[Overtaker]}({drivers_number[overtakerDriver]}) overtakes {grid[Overtaken]}({drivers_number[overtakenDriver]})")    
+            grid[Overtaker], grid[Overtaken] = grid[Overtaken], grid[Overtaker]
+            print("")     
+            print()
+        else:
+            Overtaken = random.randrange(maxNumber)
+            Overtaker = int(Overtaken+1)
+            overtakenDriver = grid[Overtaken]
+            overtakerDriver = grid[Overtaker]
+            print(f"{current_time}:       {grid[Overtaker]} {random.choice(overtake_attempt)} {grid[Overtaken]} {random.choice(language.overtakeFailureMsg)}")
+
     makeOvertake()
 def crash():
     now = datetime.now()
@@ -161,7 +179,7 @@ def crash():
     if MaxNumber <= 6:
         finishProcedure()
     crashed = int(random.randrange(MaxNumber))
-    crashMsgs = [f"{current_time}:       OH MY GOD, {grid[crashed]} is out of the race", f"{current_time}:       and here is {grid[crashed]} retired due to an engine failure", f"{current_time}:       and there he is {grid[crashed]} who has gone straight into the barrier", f"{current_time}:       and there he is {grid[crashed]} stuck in the gravel" ]
+    crashMsgs = [f"{current_time}:       {language.oh_god}, {grid[crashed]} {language.out}", f"{current_time}:       {language.there_is} {grid[crashed]} {language.retired} {language.engine_fail}", f"{current_time}:       {language.there_is} {grid[crashed]} {language.barrier}", f"{current_time}:       {language.there_is} {grid[crashed]} {language.gravel}" ]
     crashMsg = random.choice(crashMsgs)
     crashedDriver = grid[crashed]
     print(f"{crashMsg}\n")
@@ -179,7 +197,7 @@ def doubleCrash():
     crashed2 = int(crashed1-1)
     crashedDriver1 = grid[crashed1]
     crashedDriver2 = grid[crashed2]
-    crashMsgs = [f"{current_time}:       OH NO {grid[crashed1]} crashed in {grid[crashed2]}",f"{current_time}:       damn 2 cars are involved in a incident, {crashedDriver2} has been hit by {crashedDriver1} and now they are both out of the race", f"{current_time}:       WOW that was an impossible move by  {crashedDriver1} who tried to overtake {crashedDriver2} in a impossible place, and now they are both out.",f"{current_time}:       how unlucky for {crashedDriver2} who has been taken out from {crashedDriver1} now they are both out"]
+    crashMsgs = [f"{current_time}:       {language.oh_no} {grid[crashed1]} {language.crash_type1} {grid[crashed2]}",f"{current_time}:       {language.damn} {crashedDriver2} {language.hit_by} {crashedDriver1} {language.both_out}", f"{current_time}:       {language.impossible_move} {crashedDriver1} {language.who_tried} {crashedDriver2} {language.impossible_place}",f"{current_time}:       {language.unlucky} {crashedDriver2} {language.taken_out} {crashedDriver1} {language.both_out}"]
     print(random.choice(crashMsgs))
     report.append(f"LAP     {lap} {grid[crashed1]}({drivers_number[crashedDriver1]}) and {grid[crashed2]}({drivers_number[crashedDriver2]}) are out of the race")
     grid.remove(crashedDriver1)
@@ -205,59 +223,93 @@ def Lap():
            
 def finishProcedure():
     report.append(f"final grid:         {grid}")
-    print(f"podium:\n | 2nd {grid[1]} | 1st {grid[0]} | 3rd {grid[2]} |")
+    print(f"{language.podium}:\n | 2nd {grid[1]} | 1st {grid[0]} | 3rd {grid[2]} |")
     print("")
-    print(f"final arrival order:        {('     , ').join(grid)}")
+    print(f"{language.arrival_order}        {('     , ').join(grid)}")
     def saveque():
-        saveQ = input(f"do you want to save this report? ")
+        saveQ = input(f"{language.save_report}")
         if saveQ == "yes":
+            makedir()
             saveReport()
-            print("report saved")
+            saveReactions()
+            print(language.saved) 
         elif saveQ == "YES":
+            makedir()
             saveReport()
-            print("report saved")
+            saveReactions()
+            print(language.saved) 
         elif saveQ == "Yes":
+            makedir()
             saveReport()
-            print("report saved")
+            saveReactions()
+            print(language.saved) 
         elif saveQ == "yEs":
+            makedir()
             saveReport()
-            print("report saved")
+            saveReactions()
+            print(language.saved) 
         elif saveQ == "yeS":
+            makedir()
             saveReport()
-            print("report saved")
+            saveReactions()
+            print(language.saved) 
         elif saveQ == "YEs":
+            makedir()
             saveReport()
-            print("report saved")
+            saveReactions()
+            print(language.saved) 
         elif saveQ == "yES":
+            makedir()
             saveReport()
-            print("report saved")    
+            print(language.saved)  
+        elif saveQ == "si":
+            makedir()
+            saveReport()
+            print(language.saved) 
+        elif saveQ == "Si":
+            makedir()
+            saveReport()
+            print(language.saved) 
+        elif saveQ == "SI":
+            makedir()
+            saveReport()
+            print(language.saved) 
+        elif saveQ == "sI":
+            makedir()
+            saveReport()
+            print(language.saved) 
         elif saveQ == "no":
-            print("report not saved")
+            print(language.not_saved)
         elif saveQ == "NO":
-            print("report not saved")
+            print(language.not_saved)
         elif saveQ == "nO":
-            print("report not saved")
+            print(language.not_saved)
         elif saveQ == "No":
-            print("report not saved")
+            print(language.not_saved)
         else: 
-            print("this is not a valid option please type it again\n")
+            print(f"{language.invalid_option}")
             saveque()
     saveque() 
-    
-    exit()
-
+reportDir =  (f"./race {today} - {current_time}")  
+def makedir():
+    os.makedirs(reportDir)
 def saveReport():
     today = date.today()
     now = datetime.now()
     current_time = now.strftime("%H:%M:%S")
-    f = open(f"report {today} - {current_time}.txt", "w")
+    f = open(f"{reportDir}/report.txt", "w")
     f.write(f"report of the race {today} - {current_time}\n")
     f.writelines(f"{('     , ').join(report)}")
 
+def saveReactions():
+    f = open(f"{reportDir}/reactions.txt", "w")
+    f.write(f"{('   , ').join(reaction_times)}")
+    # f.writelines(f"{('     , ').join(report)}")
+    
 
 def main():
     
-    laps = input("how many laps is this race going to be:       ")
+    laps = input(f"{language.lapsQ}       ")
     laps = int(laps)
     start()
     for _ in range(laps):
@@ -267,7 +319,35 @@ def main():
     # driverTest = str(grid[1])
     # report.append(f"{drivers_number[driverTest]}")
     # print(report)
-
+    
     finishProcedure()
     
 main()
+
+
+
+
+
+
+    # Bahrain GP
+    # Saudi Arabian GP
+    # Australian GP
+    # Emilia Romagna GP
+    # Miami GP
+    # Spanish GP
+    # Monaco GP
+    # Azerbaijan GP
+    # Canadian GP
+    # British GP
+    # Austrian GP
+    # French GP
+    # Hungarian GP
+    # Belgian GP
+    # Dutch GP
+    # Italian GP
+    # Singapore GP
+    # Japanese GP
+    # United States GP
+    # Mexico City GP
+    # Brazilian GP
+    # Abu Dhabi GP
