@@ -265,18 +265,22 @@ def finishProcedure():
         elif saveQ == "si":
             makedir()
             saveReport()
+            saveReactions()
             print(language.saved) 
         elif saveQ == "Si":
             makedir()
             saveReport()
+            saveReactions()
             print(language.saved) 
         elif saveQ == "SI":
             makedir()
             saveReport()
+            saveReactions()
             print(language.saved) 
         elif saveQ == "sI":
             makedir()
             saveReport()
+            saveReactions()
             print(language.saved) 
         elif saveQ == "no":
             print(language.not_saved)
