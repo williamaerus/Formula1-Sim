@@ -8,7 +8,7 @@ There is nothing to install for this script, it uses this modules:
 if you miss one of this modules you can install them with `pip`
 # how to use it
 the code works without any kind of setup needed, you just need to run the script using this command: windows `python main.py` linux `python3 main.py`
-then you will need to insert the number of laps that you want your race to be, the script is made for around 30 laps races, of course it's going to work also with longer ones with the risk of not having enough cars on grid. 
+then you will need to insert the number of laps that you want your race to be, and the language that you want to use english ore italian for now, the script is made for around 30 laps races, of course it's going to work also with longer ones with the risk of not having enough cars on grid. 
 
 When there are not enough cars on grid the script is going to stop automatically and start the finish procedure. 
 
@@ -17,4 +17,7 @@ to be able to create a "realistic" starting grid i divided the drivers in 3 grou
 # finish procedure
 when the number of laps is reached or there are not enough cars on grid to continue the race (6 cars) the script will run the finish procedure, that shows the podium and the final arrival order, and asks if you want to save the report of the race
 # the report
-every single time that there is an overtake or a car get's out of the race that event get's stored in the report that you can save at the end of the race to be able to look at it later. The report is saved with this format, `report {date} - {time}`
+every single time that there is an overtake or a car get's out of the race that event get's stored in the report that you can save at the end of the race to be able to look at it later. The report is saved in a folder named with this format, `race {date} - {time}` in which you will find 2 files_
+
+1. the report
+2. the reaction times of the drivers
