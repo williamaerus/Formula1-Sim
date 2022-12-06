@@ -290,7 +290,8 @@ def finishProcedure():
             print(f"{language.invalid_option}")
             saveque()
     saveque() 
-reportDir =  (f"./race {today} - {current_time}")  
+path = os.getcwd()
+reportDir =  (f"{path}/race {today} - {current_time}")  
 def makedir():
     os.makedirs(reportDir)
 def saveReport():
